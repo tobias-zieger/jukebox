@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png"/>
+    <link rel="icon" href="assets/apple-touch-icon.png" type="image/png"/>
+    <title>Jukebox</title>
+    <style>
+body {
+  margin: 0px;
+  font-family: sans-serif;
+}
+
+ul.cdlist {
+  padding-left: 0px;
+}
+
+h1 {
+  padding-left: 25px;
+  padding-top: 38px;
+}
+
+ul.cdlist:last-of-type {
+  padding-bottom: 100px;
+}
+
+li.CD {
+  margin: 25px;
+  display: inline-block;
+  width: 275px;
+}
+
+div.coverWithDuration {
+  position: relative;
+}
+
+img.coverImage {
+  width: 100%;
+  display: block;
+}
+
+span.duration {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #f1f3f4;
+  font-size: 14px;
+  position: absolute;
+  bottom: 0px;
+  line-height: 12px;
+  text-align: left;
+  padding: 4px;
+}
+
+span.name {
+  font-size: 16px;
+}
+
+#audiocontrol {
+  visibility: hidden;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+}
+
+#footer {
+  position: fixed;
+  left: 0px;
+  bottom: 0px;
+  height: 100px;
+  width: 100%;
+  background: white;
+  overflow: auto;
+  white-space: nowrap;
+  box-shadow: 0px 0px 30px 30px white;
+}
+
+#footer a {
+  padding-left: 5px;
+  padding-bottom: 6px;
+}
+
+#footer span.helper {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+img.categoryPicture {
+  height: 90%;
+  
+  vertical-align: middle;
+  /*max-height: 25px;
+  max-width: 160px;*/
+}
+    </style>
+  </head>
+  <body>
+    <script src="database.js"></script>
+    <script>
+      // These two sort functions are required to work in Mobile Safari 9.
+      // We need them to reference a function as this lambda stuff to do it inline does not work in that environment.
+      function isort(a, b) {
+        return a.toLowerCase().localeCompare(b.toLowerCase());
+      }
+      function objectsort(a, b) {
+        return isort(a["name"], b["name"])
+      }
+    
+      // For each CD, make an object containing the cover image and the audio file for later access.
+      cdDictionary = {}
+    
+      // group by category
+      categories = new Set()
+      groupedCds = {}
+      for (cd of cds) {
+        group = (groupedCds.hasOwnProperty(cd.category) ? groupedCds[cd.category] : [])
+        group.push(cd)
+        groupedCds[cd.category] = group
+        categories.add(cd.category)
+      }
+      categories = Array.from(categories).sort(isort);
+      
+      for (category of categories) {
+        if (category != "") {
+          document.write("<h1 id=\"" + category + "\">" + category + "</h1>")
+        }
+        document.write("<ul class=\"cdlist\">")
+          for (cd of groupedCds[category].sort(objectsort)) {
+          // Add it to the CD dictionary.
+          index = Object.keys(cdDictionary).length + 1
+          cdDictionary["cd" + index] = cd
+          
+          // Add it to the page.
+          document.write("<li class=\"CD\" id=\"cd" + index + "\">")
+          document.write("  <div class=\"coverWithDuration\">")
+          document.write("    <img class=\"coverImage\" src=\"" + cd["cover"] + "\" title=\"" + cd["name"] + "\">")
+          document.write("    <span class=\"duration\">" + cd["duration"] + "</span>")
+          document.write("  </div>")
+          document.write("  <span class=\"name\">" + cd["name"] + "</span>")
+          document.write("</li>")
+        }
+        document.write("</ul>")
+      }
+
+    cdElements = document.getElementsByClassName("CD");
+    
+    // For-of loops don't work in Mobile Safari 9 under some (unknown) circumstances.
+    for (i = 0; i < cdElements.length; i++) {
+
+      cdElements[i].onclick = function(e) {
+        e.preventDefault();
+        elm = e.target;
+
+        // Bubble up to find LI from the current element.
+        while (true) {
+          if (elm.nodeName == "LI")
+            break;
+          else
+            elm = elm.parentElement;
+        }
+
+        cd = cdDictionary[elm.id]
+
+        audio = document.getElementById("audiocontrol");
+        audio.style.visibility = "visible";
+        // Clean its content so that we know that it's empty in the following.
+        audio.textContent = "";
+
+        source = document.createElement("source");
+        source.setAttribute("id", "audiosource");
+        source.setAttribute("src", cd["audio"]);
+        audio.appendChild(source)
+        
+
+        // Preload the audio without playing.
+        audio.load();
+
+        // Actually start playing.
+        audio.play();
+
+        // Remove all shadows.
+        coverImages = document.getElementsByClassName("coverImage")
+        for (coverImageIndex = 0; coverImageIndex < coverImages.length; coverImageIndex++) {
+          coverImage = coverImages[coverImageIndex]
+          coverImage.style.boxShadow = ""
+        }
+      
+       // Add a shadow for the one that was chosen.
+        elm.querySelector("div img").style.boxShadow = "0px 0px 10px 10px deepskyblue"
+      };
+    }
+
+    // Show the footer only if it actually contains something.
+    if (categories.length > 1) {
+      document.write("<div id=\"footer\">")
+      document.write("<span class=\"helper\"></span>")
+      for (category of categories) {
+        if (category != "") {
+          document.write("<a href=\"#" + category + "\"><img class=\"categoryPicture\" title=\"" + category + "\" src=\"category%20pictures/" + category + ".jpg\"></a>")
+        }
+      }
+      document.write("</div>")
+    }
+    </script>
+    <audio id="audiocontrol" controls></audio>
+  </body>
+</html>
+
