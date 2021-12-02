@@ -89,19 +89,32 @@ img.categoryPicture {
   height: 90%;
   
   vertical-align: middle;
-  /*max-height: 25px;
-  max-width: 160px;*/
 }
     </style>
   </head>
   <body>
     <script src="database.js"></script>
     <script>
-      // These two sort functions are required to work in Mobile Safari 9.
-      // We need them to reference a function as this lambda stuff to do it inline does not work in that environment.
-      function isort(a, b) {
-        return a.toLowerCase().localeCompare(b.toLowerCase());
+      // These sort functions are required to work in Mobile Safari 9.
+      // We need them to reference a function as this lambda stuff to do it inline and some other functions (e.g., padstart) do not work in that environment.
+      function padSingleNumberWithZeros(strnum) {
+        desiredLength = 8;
+        paddingChar = "0";
+        // return strnum.padStart(desiredLength, paddingChar); // This does not work in that old browser.
+        while (strnum.length < desiredLength) {
+          strnum = paddingChar + strnum;
+        }
+        return strnum;
       }
+
+      function padStringWithZeros(str) {
+        return str.replace(/\d+/g, padSingleNumberWithZeros);
+      }
+
+      function isort(a, b) {
+        return padStringWithZeros(a.toLowerCase()).localeCompare(padStringWithZeros(b.toLowerCase()));
+      }
+
       function objectsort(a, b) {
         return isort(a["name"], b["name"])
       }
