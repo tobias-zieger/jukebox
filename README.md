@@ -33,6 +33,11 @@ Install `ffmpeg` to read out the cover images and `ffprobe` to read out the dura
 
 Run `update-database.sh` without parameters. It will create everything that is necessary.
 
+## Usage
+
+Just open the page.
+
+There is an autoplay toggle. If this is clicked and blue, it automatically plays the next CD in the list once one is finished. This is intended for the case that a CD might be split into several chapters and all of them are single files and you want to listen to them subsequently).
 
 ## Tools
 
