@@ -90,6 +90,24 @@ img.categoryPicture {
   
   vertical-align: middle;
 }
+
+
+#autoplay-panel {
+  position: fixed;
+  top: 100px;
+  background-color: whitesmoke;
+  padding: 10px;
+  border-radius: 25px;
+  left: -30px;
+  text-align: right;
+  width: 60px;
+  font-size: 40px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: gray;
+  color: black;
+  cursor: pointer;
+}
     </style>
   </head>
   <body>
@@ -112,16 +130,79 @@ img.categoryPicture {
       }
 
       function isort(a, b) {
-        return padStringWithZeros(a.toLowerCase()).localeCompare(padStringWithZeros(b.toLowerCase()));
+        // The numeric: true hash is ignored by Mobile Safari 9.
+        return padStringWithZeros(a.toLowerCase()).localeCompare(padStringWithZeros(b.toLowerCase(), undefined, {numeric: true}));
       }
 
       function objectsort(a, b) {
         return isort(a["name"], b["name"])
       }
+
+      function playCd(selectedCd) {
+        audio = document.getElementById("audiocontrol");
+        audio.style.visibility = "visible";
+        // Clean its content so that we know that it's empty in the following.
+        audio.textContent = "";
+
+        source = document.createElement("source");
+        source.setAttribute("id", "audiosource");
+        source.setAttribute("src", selectedCd["audio"]);
+        audio.appendChild(source)
+
+        // Preload the audio without playing.
+        audio.load();
+
+        // Actually start playing.
+        audio.play();
+
+        // Remove all shadows.
+        coverImages = document.getElementsByClassName("coverImage");
+        for (coverImageIndex = 0; coverImageIndex < coverImages.length; coverImageIndex++) {
+          coverImage = coverImages[coverImageIndex];
+          coverImage.style.boxShadow = "";
+        }
+
+        // Add a shadow for the one that was chosen.
+        // For the autoplay to work, we cannot derive that from the element that was clicked on but from the CD that is playing, because there is no click when autoplaying.
+        // Fake a click.
+        id = "cd" + (cdsInOrder.indexOf(cd) + 1);
+        elm = document.getElementById(id);
+        elm.querySelector("div img").style.boxShadow = "0px 0px 10px 10px deepskyblue";
+        //document.querySelector("div img").style.boxShadow = "0px 0px 10px 10px deepskyblue";
+      }
+
+      function continueOnAutoplay() {
+        if (!autoplay) {
+          // no autoplay
+          return;
+        }
+        currentIndex = cdsInOrder.indexOf(cd);
+        nextIndex = currentIndex + 1
+        if (nextIndex == cdsInOrder.length) {
+          nextIndex = 0;
+        }
+        nextCd = cdsInOrder[nextIndex];
+
+        // This is the global variable that hold the currently played CD.
+        cd = nextCd;
+
+        playCd(nextCd);
+      }
+
+      function toggleAutoplay() {
+        autoplay = !autoplay;
+        newColor = autoplay ? "deepskyblue" : "black";
+        document.getElementById("autoplay-panel").style.color = newColor;
+      }
     
+      autoplay = false;
+
       // For each CD, make an object containing the cover image and the audio file for later access.
-      cdDictionary = {}
+      cdDictionary = {};
     
+      // For autoplay, we need a structure for the CDs that we can cycle through easily.
+      cdsInOrder = []
+
       // group by category
       categories = new Set()
       groupedCds = {}
@@ -143,6 +224,8 @@ img.categoryPicture {
           index = Object.keys(cdDictionary).length + 1
           cdDictionary["cd" + index] = cd
           
+          cdsInOrder.push(cd);
+
           // Add it to the page.
           document.write("<li class=\"CD\" id=\"cd" + index + "\">")
           document.write("  <div class=\"coverWithDuration\">")
@@ -172,34 +255,9 @@ img.categoryPicture {
             elm = elm.parentElement;
         }
 
-        cd = cdDictionary[elm.id]
-
-        audio = document.getElementById("audiocontrol");
-        audio.style.visibility = "visible";
-        // Clean its content so that we know that it's empty in the following.
-        audio.textContent = "";
-
-        source = document.createElement("source");
-        source.setAttribute("id", "audiosource");
-        source.setAttribute("src", cd["audio"]);
-        audio.appendChild(source)
+        cd = cdDictionary[elm.id];
         
-
-        // Preload the audio without playing.
-        audio.load();
-
-        // Actually start playing.
-        audio.play();
-
-        // Remove all shadows.
-        coverImages = document.getElementsByClassName("coverImage")
-        for (coverImageIndex = 0; coverImageIndex < coverImages.length; coverImageIndex++) {
-          coverImage = coverImages[coverImageIndex]
-          coverImage.style.boxShadow = ""
-        }
-      
-       // Add a shadow for the one that was chosen.
-        elm.querySelector("div img").style.boxShadow = "0px 0px 10px 10px deepskyblue"
+        playCd(cd);
       };
     }
 
@@ -215,7 +273,8 @@ img.categoryPicture {
       document.write("</div>")
     }
     </script>
-    <audio id="audiocontrol" controls></audio>
+    <audio id="audiocontrol" onended="continueOnAutoplay();" controls></audio>
+    <span id="autoplay-panel" onclick="toggleAutoplay()" title="Toggle Autoplay">↺</span>
   </body>
 </html>
 
