@@ -214,6 +214,15 @@ img.categoryPicture {
       }
       categories = Array.from(categories).sort(isort);
       
+      // preload the images of the footer as early as possible
+      document.write("<div style=\"display:none\">");
+      for (category of categories) {
+        if (category != "") {
+          document.write("<img src=\"category%20pictures/" + category + ".jpg\">");
+        }
+      }
+      document.write("</div>");
+      
       for (category of categories) {
         if (category != "") {
           document.write("<h1 id=\"" + category + "\">" + category + "</h1>")
