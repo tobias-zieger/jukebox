@@ -43,7 +43,7 @@ There is an autoplay toggle. If this is clicked and blue, it automatically plays
 
 These are some handy commands that I used during production of the audio files. Sometimes I needed to rip them.
 
-* Join MP3 files: `ffmpeg -i "concat:file1.mp3|file2.mp3" -acodec copy output.mp3` (Don't use mp3 binder or mp3cat, as this makes the files not properly scrollable in our car.)
+* Join MP3 files: `ls -1 *.mp3 | tr "\n" "|" | xargs -i ffmpeg -i "concat:{}" -acodec copy output.mp3` (Don't use mp3 binder or mp3cat, as this made the files not properly scrollable in our car.)
 * Join WAV files: `sox 1.wav 2.wav 3.wav output.wav` to edit them losslessly with Audacity.
 * Read ID3 tags: `id3v2 -l *.mp3`
 * Display the cover image dimensions: `identify -format '%w %h %f\n' * | sort -n`
