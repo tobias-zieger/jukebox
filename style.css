@@ -1,0 +1,136 @@
+body {
+  margin: 0px;
+  font-family: sans-serif;
+}
+
+ul.cdlist {
+  padding-left: 0px;
+}
+
+h1 {
+  padding-left: 25px;
+  padding-top: 38px;
+}
+
+ul.cdlist:last-of-type {
+  padding-bottom: 100px;
+}
+
+li.CD {
+  padding: 20px;
+  height: 320px;
+  display: inline-table;
+  width: 275px;
+  position: relative;
+}
+
+div.coverWithDuration {
+  position: absolute;
+  width: 275px;
+}
+
+img.coverImage {
+  width: 100%;
+  display: block;
+}
+
+#playingcover {
+  float: left;
+  padding-left: 5px;
+  padding-top: 5px;
+  height: 80px;
+}
+
+span.duration {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #f1f3f4;
+  font-size: 14px;
+  position: absolute;
+  bottom: 0px;
+  line-height: 12px;
+  text-align: left;
+  padding: 4px;
+}
+
+span.name {
+  font-size: 16px;
+  position: absolute;
+  top: 300px;
+}
+
+span.new:before {
+  color: DarkTurquoise;
+  content: "● ";
+}
+
+#player {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  background-color: white;
+  height: 100px;
+  box-shadow: 0px 0px 30px 30px white;
+  visibility: hidden;
+}
+
+#playingtitle {
+  padding-left: 10px;
+}
+
+#audiocontrol {
+  width: 85%;
+  padding-left: 10px;
+}
+
+#footer {
+  position: fixed;
+  left: 0px;
+  bottom: 0px;
+  height: 100px;
+  width: 100%;
+  background: white;
+  overflow: auto;
+  white-space: nowrap;
+  box-shadow: 0px 0px 30px 30px white;
+}
+
+#footer a {
+  padding-left: 5px;
+  padding-bottom: 6px;
+}
+
+#footer span.helper {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+img.categoryPicture {
+  height: 90%;
+  vertical-align: middle;
+}
+
+ul#buttons {
+  position: fixed;
+  top: 100px;
+}  
+
+ul#buttons li {
+  position: relative;
+  background-color: whitesmoke;
+  padding: 10px;
+  border-radius: 25px;
+  left: -70px;
+  text-align: right;
+  width: 60px;
+  font-size: 40px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: gray;
+  color: black;
+  cursor: pointer;
+  display: block;
+  margin-bottom: 10px;
+}
+
