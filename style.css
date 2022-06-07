@@ -12,8 +12,9 @@ h1 {
   padding-top: 38px;
 }
 
+
 ul.cdlist:last-of-type {
-  padding-bottom: 100px;
+  padding-bottom: 150px;
 }
 
 li.CD {
@@ -114,6 +115,7 @@ img.categoryPicture {
 ul#buttons {
   position: fixed;
   top: 100px;
+  z-index: 1;
 }  
 
 ul#buttons li {
