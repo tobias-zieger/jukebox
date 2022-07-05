@@ -49,6 +49,9 @@ function playCd(selectedCd) {
   // save it to local storage
   numberOfTimesPlayed = getNumberOfTimesPlayed(selectedCd.id);
   localStorage.setItem(selectedCd.id, ++numberOfTimesPlayed);
+  
+  // update the overlay
+  elm.querySelector("span.frequency").innerHTML = numberOfTimesPlayed;
 }
 
 function continueOnAutoplay() {
@@ -110,6 +113,10 @@ function toggleHeatmap() {
   
   for (element of htmlCollectionToArray(document.getElementsByClassName("coverImage"))) {
     element.style.opacity = (heatmapVisible ? "0.5" : "1");
+  }
+  
+  for (element of htmlCollectionToArray(document.getElementsByClassName("frequency"))) {
+    element.style.visibility = (heatmapVisible ? "visible" : "hidden");
   }
   
   updateBackgroundColor();

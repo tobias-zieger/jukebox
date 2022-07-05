@@ -42,15 +42,24 @@ img.coverImage {
   height: 80px;
 }
 
-span.duration {
+span.overlaymessage {
   background-color: rgba(0, 0, 0, 0.6);
   color: #f1f3f4;
   font-size: 14px;
   position: absolute;
   bottom: 0px;
   line-height: 12px;
-  text-align: left;
   padding: 4px;
+}
+
+span.frequency {
+  left: auto;
+  right: 0px;
+  visibility: hidden;
+}
+
+span.duration {
+  left: 0px;
 }
 
 span.name {

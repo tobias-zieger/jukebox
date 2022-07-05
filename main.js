@@ -46,13 +46,15 @@ function writeCDs() {
     for (cd of groupedCds[category].sort(objectsort)) {
       cdsInOrder.push(cd);
 
-      isNewCd = getNumberOfTimesPlayed(cd.id) < 1;
+      frequency = getNumberOfTimesPlayed(cd.id)
+      isNewCd = frequency < 1;
 
       // Add it to the page.
       document.write("<li class=\"CD\" id=\"" + cd.id + "\">")
       document.write("  <div class=\"coverWithDuration\">")
       document.write("    <img class=\"coverImage\" src=\"" + cd["cover"] + "\" title=\"" + cd["name"] + "\">")
-      document.write("    <span class=\"duration\">" + cd["duration"] + "</span>")
+      document.write("    <span class=\"duration overlaymessage\">" + cd["duration"] + "</span>")
+      document.write("    <span class=\"frequency overlaymessage\">" + frequency + "</span>")
       document.write("  </div>")
       document.write("  <span class=\"name" + (isNewCd ? " new" : "") + "\">" + cd.name + "</span>")
       document.write("</li>");
