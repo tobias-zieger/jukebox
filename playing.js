@@ -44,7 +44,7 @@ function playCd(selectedCd) {
   
   // mark this cd as having been played (once again)
   // remove the new mark
-  elm.querySelector("span.name").classList.remove("new");
+  elm.querySelector("a.name").classList.remove("new");
   
   // save it to local storage
   numberOfTimesPlayed = getNumberOfTimesPlayed(selectedCd.id);

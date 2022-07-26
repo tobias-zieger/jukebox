@@ -56,7 +56,7 @@ function writeCDs() {
       document.write("    <span class=\"duration overlaymessage\">" + cd["duration"] + "</span>")
       document.write("    <span class=\"frequency overlaymessage\">" + frequency + "</span>")
       document.write("  </div>")
-      document.write("  <span class=\"name" + (isNewCd ? " new" : "") + "\">" + cd.name + "</span>")
+      document.write("  <a class=\"name" + (isNewCd ? " new" : "") + "\" href=\"" + cd["audio"] + "\">" + cd.name + "</a>")
       document.write("</li>");
     }
     document.write("</ul>")
