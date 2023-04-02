@@ -1,25 +1,27 @@
-function playCd(selectedCd) {
+'use strict';
+
+function playCd() {
   player = document.getElementById("player");
   player.style.visibility = "visible";
 
   playingtitle = document.getElementById("playingtitle");
   
-  playingtitle.textContent = selectedCd["longtitle"];
+  playingtitle.textContent = currentlyPlayingCd["longtitle"];
 
   playingcover = document.getElementById("playingcover");
-  playingcover.src = selectedCd["cover"];
+  playingcover.src = currentlyPlayingCd["cover"];
 
   playingcoverlink = document.getElementById("playingcoverlink");
-  playingcoverlink.href = "#" + selectedCd["id"];
+  playingcoverlink.href = "#" + currentlyPlayingCd["id"];
 
-  audio = document.getElementById("audiocontrol");
+  var audio = document.getElementById("audiocontrol");
 
   // Clean its content so that we know that it's empty in the following.
   audio.textContent = "";
 
-  source = document.createElement("source");
+  var source = document.createElement("source");
   source.setAttribute("id", "audiosource");
-  source.setAttribute("src", selectedCd["audio"]);
+  source.setAttribute("src", currentlyPlayingCd["audio"]);
   audio.appendChild(source)
 
   // Preload the audio without playing.
@@ -31,15 +33,15 @@ function playCd(selectedCd) {
   refreshHeatmapOverlayColors();
 
   // Remove all shadows.
-  for (coverImage of htmlCollectionToArray(document.getElementsByClassName("coverImage"))) {
+  for (var coverImage of htmlCollectionToArray(document.getElementsByClassName("coverImage"))) {
     coverImage.style.boxShadow = "";
   }
 
   // Add a shadow for the one that was chosen.
   // For the autoplay to work, we cannot derive that from the element that was clicked on but from the CD that is playing, because there is no click when autoplaying.
   // Fake a click.
-  elm = document.getElementById(selectedCd.id);
-  imageElement = elm.querySelector("div img");
+  var elm = document.getElementById(currentlyPlayingCd.id);
+  var imageElement = elm.querySelector("div img");
   imageElement.style.boxShadow = "0px 0px 10px 10px deepskyblue";
   
   // mark this cd as having been played (once again)
@@ -47,8 +49,8 @@ function playCd(selectedCd) {
   elm.querySelector("a.name").classList.remove("new");
   
   // save it to local storage
-  numberOfTimesPlayed = getNumberOfTimesPlayed(selectedCd.id);
-  localStorage.setItem(selectedCd.id, ++numberOfTimesPlayed);
+  var numberOfTimesPlayed = getNumberOfTimesPlayed(currentlyPlayingCd.id);
+  localStorage.setItem(currentlyPlayingCd.id, ++numberOfTimesPlayed);
   
   // update the overlay
   elm.querySelector("span.frequency").innerHTML = numberOfTimesPlayed;
@@ -59,46 +61,47 @@ function continueOnAutoplay() {
     // no autoplay
     return;
   }
-  currentIndex = cdsInOrder.indexOf(cd);
-  nextIndex = currentIndex + 1
+  var currentIndex = cdsInOrder.indexOf(currentlyPlayingCd);
+  var nextIndex = currentIndex + 1;
   if (nextIndex == cdsInOrder.length) {
     nextIndex = 0;
   }
-  nextCd = cdsInOrder[nextIndex];
+  var nextCd = cdsInOrder[nextIndex];
 
-  // This is the global variable that hold the currently played CD.
-  cd = nextCd;
+  // This is the global variable that holds the currently played CD.
+  currentlyPlayingCd = nextCd;
 
-  playCd(nextCd);
+  playCd();
 }
 
 function toggleAutoplay() {
   autoplay = !autoplay;
-  newColor = autoplay ? "deepskyblue" : "black";
+  var newColor = autoplay ? "deepskyblue" : "black";
   document.getElementById("autoplay-panel").style.color = newColor;
 }
 
 function playRandomCd() {
-  cdKeys = Object.keys(cdDictionary);
-  randomIndex = Math.floor(Math.random() * cdKeys.length);
-  randomCd = cdDictionary[cdKeys[randomIndex]];
-  playCd(randomCd);
+  var cdKeys = Object.keys(cdDictionary);
+  var randomIndex = Math.floor(Math.random() * cdKeys.length);
+  var randomCd = cdDictionary[cdKeys[randomIndex]];
+  currentlyPlayingCd = randomCd;
+  playCd();
 }
 
 function refreshHeatmapOverlayColors() {
   // Recalculate and change the style of each overlay.
   // The minimum is 0. Find the maximum value to interpolate the color. Start with a maximum of 1 to avoid a division by zero below.
-  maximum = 1;
+  var maximum = 1;
   
-  for (cd of cds) {
+  for (var cd of cds) {
     maximum = Math.max(maximum, getNumberOfTimesPlayed(cd.id));
   }
   
   for (cd of cds) {
     // calculate the color value
-    fraction = getNumberOfTimesPlayed(cd.id) / maximum;
+    var fraction = getNumberOfTimesPlayed(cd.id) / maximum;
     // We go from yellow (60) to red (0).
-    colorValue = 60 - fraction * 60;
+    var colorValue = 60 - fraction * 60;
     // We misuse this field because we have no other convenient way to store the hue.
     document.getElementById(cd.id).style.animationIterationCount = colorValue;
   }
@@ -108,10 +111,10 @@ function refreshHeatmapOverlayColors() {
 
 function toggleHeatmap() {
   heatmapVisible = !heatmapVisible;
-  newColor = heatmapVisible ? "deepskyblue" : "black";
+  var newColor = heatmapVisible ? "deepskyblue" : "black";
   document.getElementById("heatmap-panel").style.color = newColor;
   
-  for (element of htmlCollectionToArray(document.getElementsByClassName("coverImage"))) {
+  for (var element of htmlCollectionToArray(document.getElementsByClassName("coverImage"))) {
     element.style.opacity = (heatmapVisible ? "0.5" : "1");
   }
   
@@ -123,8 +126,8 @@ function toggleHeatmap() {
 }
 
 function updateBackgroundColor() {
-  for (element of htmlCollectionToArray(document.getElementsByClassName("CD"))) {
-    colorValue = document.getElementById(element.id).style.animationIterationCount;
+  for (var element of htmlCollectionToArray(document.getElementsByClassName("CD"))) {
+    var colorValue = document.getElementById(element.id).style.animationIterationCount;
     element.style.backgroundColor = "hsla(" + colorValue + ", 100%, 50%, " + (heatmapVisible ? "1" : "0") + ")";
   }
 }
