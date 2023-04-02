@@ -1,8 +1,10 @@
+'use strict';
+
 // These sort functions are required to work in Mobile Safari 9.
 // We need them to reference a function as this lambda stuff to do it inline and some other functions (e.g., padstart) do not work in that environment.
 function padSingleNumberWithZeros(strnum) {
-  desiredLength = 8;
-  paddingChar = "0";
+  var desiredLength = 8;
+  var paddingChar = "0";
   // return strnum.padStart(desiredLength, paddingChar); // This does not work in that old browser.
   while (strnum.length < desiredLength) {
     strnum = paddingChar + strnum;
@@ -25,7 +27,7 @@ function objectsort(a, b) {
 
 function calculateId(cd) {
   // replaceAll() does not work in Mobile Safari 9, but this is even as good
-  const regex = /[^a-z0-9]/g;
+  var regex = /[^a-z0-9]/g;
   return cd.longtitle.toLowerCase().replace(regex, "");
 }
 
@@ -34,8 +36,8 @@ function getNumberOfTimesPlayed(key) {
 }
 
 function htmlCollectionToArray(collection) {
-  result = [];
-  for (i = 0; i < collection.length; i++) {
+  var result = [];
+  for (var i = 0; i < collection.length; i++) {
     result.push(collection[i]);
   }
   return result;

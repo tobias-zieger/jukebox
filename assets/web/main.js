@@ -1,12 +1,23 @@
+'use strict';
+
 function prepareData() {
   // Iterate over the CDs and enrich them and fill the categories mapping with it.
-  groupedCds = {}
+  groupedCds = {};
 
-  for (cd of cds) {
+  // Get the base audio directory because we need this for the category pictures.
+  baseAudioDirectory = cds[0]["audio"].split("/");
+  baseAudioDirectory.pop();
+  if (cds[0]['category'] != '') {
+    baseAudioDirectory.pop();
+  }
+  baseAudioDirectory = baseAudioDirectory.join('/');
+
+  for (var cd of cds) {
     // Enrich the CD with its long title.
-    cd.longtitle = (cd.category ? cd.category + " - " : "") + cd.name
+    cd.longtitle = (cd.category ? cd.category + " - " : "") + cd.name;
+
     // Enrich the CDs with IDs. We need that to have fixed references (for #links and to recognize them regarding their usage). Numeric IDs are bad here, because they would be unstable when a CD is added or removed.
-    id = calculateId(cd);
+    var id = calculateId(cd);
 
     // In case of an ID clash, complain about it, ignore it, and continue. The first CD wins.
     if (Object.keys(cdDictionary).includes(id)) {
@@ -17,11 +28,11 @@ function prepareData() {
     cdDictionary[id] = cd;
 
     // Sort the CD into a group for that category.
-    group = (groupedCds.hasOwnProperty(cd.category) ? groupedCds[cd.category] : [])
-    group.push(cd)
-    groupedCds[cd.category] = group
+    var group = (groupedCds.hasOwnProperty(cd.category) ? groupedCds[cd.category] : []);
+    group.push(cd);
+    groupedCds[cd.category] = group;
   }
-  
+
   // Store and sort the categories.  
   categories = Array.from(Object.keys(groupedCds)).sort(isort);
 }
@@ -29,25 +40,25 @@ function prepareData() {
 function writePreloadFooterImages() {
   // preload the images of the footer as early as possible
   document.write("<div style=\"display:none\">");
-  for (category of categories) {
+  for (var category of categories) {
     if (category != "") {
-      document.write("<img src=\"category%20pictures/" + category + ".jpg\">");
+      document.write("<img src=\"" + baseAudioDirectory + "/" + category + "/" + category + ".jpg\">");
     }
   }
   document.write("</div>");
 }
 
 function writeCDs() {
-  for (category of categories) {
+  for (var category of categories) {
     if (category != "") {
       document.write("<h1 id=\"" + category + "\">" + category + "</h1>")
     }
     document.write("<ul class=\"cdlist\">");
-    for (cd of groupedCds[category].sort(objectsort)) {
+    for (var cd of groupedCds[category].sort(objectsort)) {
       cdsInOrder.push(cd);
 
-      frequency = getNumberOfTimesPlayed(cd.id)
-      isNewCd = frequency < 1;
+      var frequency = getNumberOfTimesPlayed(cd.id)
+      var isNewCd = frequency < 1;
 
       // Add it to the page.
       document.write("<li class=\"CD\" id=\"" + cd.id + "\">")
@@ -64,10 +75,10 @@ function writeCDs() {
 }
 
 function enableEventsForCDs() {
-  for (cdElement of htmlCollectionToArray(document.getElementsByClassName("CD"))) {
+  for (var cdElement of htmlCollectionToArray(document.getElementsByClassName("CD"))) {
     cdElement.onclick = function(e) {
       e.preventDefault();
-      elm = e.target;
+      var elm = e.target;
 
       // Bubble up to find LI from the current element.
       while (true) {
@@ -77,9 +88,8 @@ function enableEventsForCDs() {
           elm = elm.parentElement;
       }
 
-      cd = cdDictionary[elm.id];
-
-      playCd(cd);
+      currentlyPlayingCd = cdDictionary[elm.id];
+      playCd();
     };
   }
 }
@@ -91,9 +101,9 @@ function writeFooter() {
   }
   document.write("<div id=\"footer\">")
   document.write("<span class=\"helper\"></span>")
-  for (category of categories) {
+  for (var category of categories) {
     if (category != "") {
-      document.write("<a href=\"#" + category + "\"><img class=\"categoryPicture\" title=\"" + category + "\" src=\"category%20pictures/" + category + ".jpg\"></a>")
+      document.write("<a href=\"#" + category + "\"><img class=\"categoryPicture\" title=\"" + category + "\" src=\"" + baseAudioDirectory + "/" + category + "/" + category + ".jpg\"></a>")
     }
   }
   document.write("</div>");
@@ -105,15 +115,23 @@ if (location.search == "?clear") {
   localStorage.clear(); 
 }
 
-autoplay = false;
+var baseAudioDirectory;
+
+var autoplay = false;
 
 // For each CD, make an object containing the cover image and the audio file for later access.
-cdDictionary = {};
+var cdDictionary = {};
 
 // For autoplay, we need a structure for the CDs that we can cycle through easily.
-cdsInOrder = []
+var cdsInOrder = []
 
-heatmapVisible = false;
+var heatmapVisible = false;
+
+var categories;
+
+var groupedCds;
+
+var currentlyPlayingCd;
 
 prepareData();
 writePreloadFooterImages();
