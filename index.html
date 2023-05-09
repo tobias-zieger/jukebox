@@ -1,9 +1,23 @@
 <!DOCTYPE html>
 <html lang="de">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png"/>
-    <link rel="icon" href="assets/img/apple-touch-icon.png" type="image/png"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <!--
+    The page's icon can be used in various locations:
+    - Desktop browser
+    - iPad bookmark and home screen
+    - Android browser, bookmark, home screen, and lock screen
+    
+    For bookmarks and home screen it would be good to have a static image.
+    
+    While playing, the browser favicon and the lock screen icon should show the currently played CD.
+    
+    Observations: At least when the icon is quite square it works for all the occasions above, probably even until it's ridiculously unsquare.
+    -->
+    <link rel="icon" href="assets/img/apple-touch-icon.png">
+    <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+    
     <link rel="stylesheet" href="assets/web/style.css">
     <title>Jukebox</title>
   </head>
@@ -18,7 +32,7 @@
     <script src="assets/web/playing.js"></script>
     <script src="assets/web/main.js"></script>
     <div id="player">
-      <a id="playingcoverlink"><img id="playingcover"/></a>
+      <a id="playingcoverlink"><img id="playingcover" alt="Cover of the currently playing CD" src=""/></a>
       <audio id="audiocontrol" onended="continueOnAutoplay();" controls></audio>
       <br>
       <span id="playingtitle"></span>

@@ -62,13 +62,13 @@ function writeCDs() {
 
       // Add it to the page.
       document.write("<li class=\"CD\" id=\"" + cd.id + "\">");
-      document.write("  <a class=\"name" + (isNewCd ? " new" : "") + "\" href=\"" + cd["audio"] + "\">");
+      document.write("  <a class=\"name\" href=\"" + cd["audio"] + "\">");
       document.write("    <div class=\"coverWithDuration\">");
       document.write("      <img class=\"coverImage\" src=\"" + cd["cover"] + "\" title=\"" + cd["name"] + "\">");
       document.write("      <span class=\"duration overlaymessage\">" + cd["duration"] + "</span>");
       document.write("      <span class=\"frequency overlaymessage\">" + frequency + "</span>");
       document.write("    </div>");
-      document.write("    <span class=\"cdTitle\">" + cd.name + "</span>");
+      document.write("    <span class=\"cdTitle" + (isNewCd ? " new" : "") + "\">" + cd.name + "</span>");
       document.write("  </a>")
       document.write("</li>");
     }

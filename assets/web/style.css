@@ -73,7 +73,7 @@ a.name {
   cursor: default;
 }
 
-a.new:before {
+span.new:before {
   color: DarkTurquoise;
   content: "● ";
 }

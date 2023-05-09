@@ -1,17 +1,26 @@
 'use strict';
 
 function playCd() {
-  player = document.getElementById("player");
+  var player = document.getElementById("player");
   player.style.visibility = "visible";
 
-  playingtitle = document.getElementById("playingtitle");
+  var playingtitle = document.getElementById("playingtitle");
   
-  playingtitle.textContent = currentlyPlayingCd["longtitle"];
+  var title = currentlyPlayingCd["longtitle"];
 
-  playingcover = document.getElementById("playingcover");
+  playingtitle.textContent = title;
+  document.title = title;
+
+  var playingcover = document.getElementById("playingcover");
   playingcover.src = currentlyPlayingCd["cover"];
+  
+  var favicon = document.querySelector("link[rel~='icon']");
+  favicon.href = currentlyPlayingCd['cover'];
 
-  playingcoverlink = document.getElementById("playingcoverlink");
+  var appleTouchIcon = document.querySelector("link[rel~='apple-touch-icon']");
+  appleTouchIcon.href = currentlyPlayingCd['cover'];
+
+  var playingcoverlink = document.getElementById("playingcoverlink");
   playingcoverlink.href = "#" + currentlyPlayingCd["id"];
 
   var audio = document.getElementById("audiocontrol");
@@ -46,7 +55,7 @@ function playCd() {
   
   // mark this cd as having been played (once again)
   // remove the new mark
-  elm.querySelector("a.name").classList.remove("new");
+  elm.querySelector("span.cdTitle").classList.remove("new");
   
   // save it to local storage
   var numberOfTimesPlayed = getNumberOfTimesPlayed(currentlyPlayingCd.id);
