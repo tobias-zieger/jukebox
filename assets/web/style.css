@@ -130,7 +130,13 @@ ul#buttons {
   position: fixed;
   top: 100px;
   z-index: 1;
+  width: 0px;
 }  
+
+.randomCategoryButton {
+  cursor: pointer;
+  font-size: 40px;
+}
 
 ul#buttons li {
   position: relative;

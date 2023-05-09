@@ -51,7 +51,7 @@ function writePreloadFooterImages() {
 function writeCDs() {
   for (var category of categories) {
     if (category != "") {
-      document.write("<h1 id=\"" + category + "\">" + category + "</h1>")
+      document.write("<h1 id=\"" + category + "\">" + category + " <span class=\"randomCategoryButton\" onclick=\"playRandomCdFromCategory('" + category + "')\">⚄</span></h1>")
     }
     document.write("<ul class=\"cdlist\">");
     for (var cd of groupedCds[category].sort(objectsort)) {

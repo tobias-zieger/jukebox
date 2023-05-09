@@ -80,12 +80,39 @@ function toggleAutoplay() {
   document.getElementById("autoplay-panel").style.color = newColor;
 }
 
-function playRandomCd() {
-  var cdKeys = Object.keys(cdDictionary);
+function playRandomCd(hashOfCds) {
+  var cdKeys = Object.keys(hashOfCds);
   var randomIndex = Math.floor(Math.random() * cdKeys.length);
-  var randomCd = cdDictionary[cdKeys[randomIndex]];
+  var randomCd = hashOfCds[cdKeys[randomIndex]];
   currentlyPlayingCd = randomCd;
   playCd();
+}
+
+function playRandomCdFromWholeJukebox() {
+  // make a deep copy
+  var cds = JSON.parse(JSON.stringify(cdDictionary));
+
+  // remove the currently selected CD to not repeat it
+  if (currentlyPlayingCd) {
+    delete cds[currentlyPlayingCd.id];
+  }
+
+  playRandomCd(cds);
+}
+
+function playRandomCdFromCategory(category) {
+  var cds = {};
+  // Create an object for the CDs in this category.
+  for (var cd of groupedCds[category]) {
+    cds[cd.id] = cd;
+  }
+
+  // Remove the currently selected CD to not repeat it (doesn't fail if this CD is not in the selected category).
+  if (currentlyPlayingCd) {
+    delete cds[currentlyPlayingCd.id]
+  }
+
+  playRandomCd(cds);
 }
 
 function refreshHeatmapOverlayColors() {
