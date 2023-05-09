@@ -12,7 +12,6 @@ h1 {
   padding-top: 38px;
 }
 
-
 ul.cdlist:last-of-type {
   padding-bottom: 150px;
 }
@@ -62,10 +61,13 @@ span.duration {
   left: 0px;
 }
 
-a.name {
-  font-size: 16px;
+span.cdTitle {
   position: absolute;
   top: 300px;
+}
+
+a.name {
+  font-size: 16px;
   text-decoration: none;
   color: black;
   cursor: default;

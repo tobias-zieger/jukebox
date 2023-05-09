@@ -61,16 +61,18 @@ function writeCDs() {
       var isNewCd = frequency < 1;
 
       // Add it to the page.
-      document.write("<li class=\"CD\" id=\"" + cd.id + "\">")
-      document.write("  <div class=\"coverWithDuration\">")
-      document.write("    <img class=\"coverImage\" src=\"" + cd["cover"] + "\" title=\"" + cd["name"] + "\">")
-      document.write("    <span class=\"duration overlaymessage\">" + cd["duration"] + "</span>")
-      document.write("    <span class=\"frequency overlaymessage\">" + frequency + "</span>")
-      document.write("  </div>")
-      document.write("  <a class=\"name" + (isNewCd ? " new" : "") + "\" href=\"" + cd["audio"] + "\">" + cd.name + "</a>")
+      document.write("<li class=\"CD\" id=\"" + cd.id + "\">");
+      document.write("  <a class=\"name" + (isNewCd ? " new" : "") + "\" href=\"" + cd["audio"] + "\">");
+      document.write("    <div class=\"coverWithDuration\">");
+      document.write("      <img class=\"coverImage\" src=\"" + cd["cover"] + "\" title=\"" + cd["name"] + "\">");
+      document.write("      <span class=\"duration overlaymessage\">" + cd["duration"] + "</span>");
+      document.write("      <span class=\"frequency overlaymessage\">" + frequency + "</span>");
+      document.write("    </div>");
+      document.write("    <span class=\"cdTitle\">" + cd.name + "</span>");
+      document.write("  </a>")
       document.write("</li>");
     }
-    document.write("</ul>")
+    document.write("</ul>");
   }
 }
 
