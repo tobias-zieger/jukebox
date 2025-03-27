@@ -121,11 +121,11 @@ Hence, the idea is to iterate over all files (MP3 and JPG for the category image
 
 Just open the page.
 
-There is an autoplay toggle. If this is clicked and blue, it automatically plays the next CD in the list once one is finished. This is intended for the case that a CD might be split into several chapters and all of them are single files and you want to listen to them subsequently). Or if you don't want your child to get wake again to select the next CD.
+There is an autoplay toggle. If this is clicked and blue, it automatically plays the next CD in the list once one is finished. This is intended for the case that a CD might be split into several chapters and all of them are single files and you want to listen to them subsequently). Or if you don't want your child to get wake again to select the next CD. It seems that this function does not work when the machine is locked. I.e., when you use this jukebox page on a tablet or a phone, make sure that either the screen ever goes off (via the developer tools, for example) or that there is no screen lock code/pattern. In this case, apparently, the autoplay does work (tested on various Android devices).
 
 There is a random button. It plays a random CD.
 
-There is a heatmap button. The jukebox saves the frequency of each CD played in the browser's Local Storage.
+There is a heatmap button. The jukebox saves the frequency of each CD played in the browser's Local Storage. It's not incredibly useful, but my daughter likes to watch this colored pattern.
 
 You can clear the heatmap information in Local Storage by adding `?clear` to the address.
 

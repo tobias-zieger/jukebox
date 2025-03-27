@@ -70,7 +70,7 @@ function continueOnAutoplay() {
     // no autoplay
     return;
   }
-  var currentIndex = cdsInOrder.indexOf(currentlyPlayingCd);
+  var currentIndex = indexOfCurrentlyPlayingCd;
   var nextIndex = currentIndex + 1;
   if (nextIndex == cdsInOrder.length) {
     nextIndex = 0;
@@ -79,6 +79,7 @@ function continueOnAutoplay() {
 
   // This is the global variable that holds the currently played CD.
   currentlyPlayingCd = nextCd;
+  indexOfCurrentlyPlayingCd = nextIndex;
 
   playCd();
 }
@@ -94,6 +95,7 @@ function playRandomCd(hashOfCds) {
   var randomIndex = Math.floor(Math.random() * cdKeys.length);
   var randomCd = hashOfCds[cdKeys[randomIndex]];
   currentlyPlayingCd = randomCd;
+  indexOfCurrentlyPlayingCd = randomIndex;
   playCd();
 }
 
