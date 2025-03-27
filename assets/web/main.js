@@ -135,6 +135,8 @@ var groupedCds;
 
 var currentlyPlayingCd;
 
+var indexOfCurrentlyPlayingCd;
+
 prepareData();
 writePreloadFooterImages();
 writeCDs();
