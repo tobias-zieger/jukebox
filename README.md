@@ -145,3 +145,17 @@ These are some handy tools and commands that I used during production of the aud
   * Set a field: `id3v2 --id3v2-only --TIT2 "a nice title" my-mp3-file.mp3` (other fields are `TPE1`, `TRCK`, `TALB`, and many more)
   * Set a cover image: `eyeD3 --add-image="cover.jpg":FRONT_COVER my-mp3-file.mp3`
 
+
+## Docker Tips
+
+These are more as a reminder for myself.
+
+To deploy the image to production, you need to build it, upload it to Docker Hub, and instantiate it on the server. This is how:
+
+* Build the image and tag it: `docker build -t tobiaszieger/jukebox .`
+* Login to Docker Hub: `docker login`
+* Push the image: `docker push tobiaszieger/jukebox`
+* Update the image (on the server): `docker pull tobiaszieger/jukebox`
+* Stop and remove the container
+* Spawn a new container with the (updated) image
+
