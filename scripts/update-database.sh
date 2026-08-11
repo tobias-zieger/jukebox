@@ -52,9 +52,9 @@ find -H "${audio_directory}" -name "*.mp3" -print0 | sort -z | while read -r -d 
   # ffmpeg consumes $1 and this causes the filename in a loop to be destroyed
   # https://stackoverflow.com/a/52374405
   ffmpeg -loglevel quiet -i "${audio_path}" -an -vcodec copy "${absolute_cover_path}" < /dev/null
-  if [[ $? -eq 1 ]]; then
-    echo "This file has no cover image. Stopping here."
-    exit 1
+  if [[ $? -ne 0 ]]; then
+    echo "This file has no cover image. We take the default image instead."
+    cp ../assets/img/default-cover.jpg "${absolute_cover_path}"
   fi
   set -e
 

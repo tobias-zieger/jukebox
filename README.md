@@ -91,7 +91,7 @@ Stop the container (assume that `badc0de` is the container name):
 
 The update script (`update-database.sh`) is a bash script that reads the `audio` directory (specified via environment variable) and creates a `database.js` file and a `cover` directory inside the `cache` directory (specified via environment variable) where it extracts the cover images of each audio file to be displayed on the page.
 
-If there is an MP3 file where the cover image cannot be extracted (because it's missing, maybe), the script will silently fail. The old (working) database file will stay intact.
+If there is an MP3 file where the cover image cannot be extracted (because it's missing, maybe), the script will use a default image instead. The old (working) database file will stay intact.
 
 All files that are not `*.mp3` are ignored, also `*.MP3`. So you can hide individual files by renaming them.
 
