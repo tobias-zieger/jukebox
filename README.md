@@ -121,7 +121,7 @@ Hence, the idea is to iterate over all files (MP3 and JPG for the category image
 
 Just open the page.
 
-There is an autoplay toggle. If this is clicked and blue, it automatically plays the next CD in the list once one is finished. This is intended for the case that a CD might be split into several chapters and all of them are single files and you want to listen to them subsequently). Or if you don't want your child to get wake again to select the next CD. It seems that this function does not work when the machine is locked. I.e., when you use this jukebox page on a tablet or a phone, make sure that either the screen ever goes off (via the developer tools, for example) or that there is no screen lock code/pattern. In this case, apparently, the autoplay does work (tested on various Android devices).
+There is an autoplay toggle. If this is clicked and blue, it automatically plays the next CD in the list once one is finished. This is intended for the case that a CD might be split into several chapters and all of them are single files and you want to listen to them subsequently). Or if you don't want your child to get wake again to select the next CD. It seems that this function does not work when the machine is locked. I.e., when you use this jukebox page on a tablet or a phone, make sure that either the screen never turns off (via the developer tools, for example) or that there is no screen lock code/pattern. In this case, apparently, the autoplay does work (tested on various Android devices). Your mileage may vary.
 
 There is a random button. It plays a random CD.
 
@@ -137,7 +137,7 @@ These are some handy tools and commands that I used during production of the aud
 * Join MP3 files: `for i in *.mp3; do sox "$i" "$(basename -s .mp3 "$i").wav"; done; sox *.wav output.wav` and convert that to mp3.
 * Join WAV files: `sox 1.wav 2.wav 3.wav output.wav` or even `sox *.wav output.wav` to edit them losslessly with Audacity.
 * Display the cover image dimensions: `identify -format '%w %h %f\n' * | sort -n`
-* Create an 800×800 image (Larger images were not displayed in our car.): `convert xxx.jpg -resize 800x800 xxx-small.jpg`
+* Create an 800×800 image, but don't enlarge smaller images (Larger images were not displayed in our car.): `convert xxx.jpg -resize 800x800\> xxx-small.jpg`
 * ID3 tag handling
   * Read ID3 tags: `id3v2 -l *.mp3`
   * EasyTAG (That's a GUI program.)
@@ -152,7 +152,7 @@ These are more as a reminder for myself.
 
 To deploy the image to production, you need to build it, upload it to Docker Hub, and instantiate it on the server. This is how:
 
-* Build the image and tag it: `docker build -t tobiaszieger/jukebox .`
+* Build the image (with the latest base image) and tag it: `docker build --pull -t tobiaszieger/jukebox .`
 * Login to Docker Hub: `docker login`
 * Push the image: `docker push tobiaszieger/jukebox`
 * Update the image (on the server): `docker pull tobiaszieger/jukebox`

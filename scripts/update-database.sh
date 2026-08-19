@@ -31,30 +31,42 @@ mkdir --parents "${cover_directory_full_path}"
 echo "\"use strict\";" >> "${database_path_temp}"
 echo "var cds = [" >> "${database_path_temp}"
 
-find -H "${audio_directory}" -name "*.mp3" -print0 | sort -z | while read -r -d $'\0' audio_path; do
-  echo "${audio_path}"
+mapfile -d $'\0' audio_files < <(find -H "${audio_directory}" -name "*.mp3" -print0 | sort -z)
+
+total_files=${#audio_files[@]}
+
+for ((i=0; i<total_files; i++)); do
+  audio_path="${audio_files[i]}"
+  current_item=$((i + 1))
+
+  echo "Processing item ${current_item}/${total_files}: ${audio_path}"
 
   category=$(dirname "${audio_path}" | sed -e "s|^${audio_directory}||" | sed -e "s|^/||")
 
   cd_specific_path_segment=$(echo "${audio_path}" | sed -e "s|^${audio_directory}/||" | sed -e "s/mp3$//")
   relative_audio_path=${audio_directory_name}/${cd_specific_path_segment}mp3
   relative_cover_path=${fixed_virtual_cache_directory}/${cover_directory_name}/${cd_specific_path_segment}jpg
-  absolute_cover_path=${cover_directory_full_path}/${cd_specific_path_segment}jpg
+  absolute_cover_path_big=${cover_directory_full_path}/${cd_specific_path_segment}big.jpg
+  absolute_cover_path_small=${cover_directory_full_path}/${cd_specific_path_segment}jpg
   
   name=$(echo "${audio_path}" | sed -e "s|^${audio_directory}/||" | sed -e "s|^${category}/${category} - ||" | sed -e "s/.mp3$//")
 
-  mkdir --parents "$(dirname "${absolute_cover_path}")"
-  # remove the possibly existing file because the cover might have been updated
-  rm -f "${absolute_cover_path}"
+  mkdir --parents "$(dirname "${absolute_cover_path_big}")"
+  # remove the possibly existing file(s) because the cover might have been updated
+  rm -f "${absolute_cover_path_big}"
+  rm -f "${absolute_cover_path_small}"
 
   # Check that the file does indeed have a cover picture. Otherwise fail immediately.
   set +e
   # ffmpeg consumes $1 and this causes the filename in a loop to be destroyed
   # https://stackoverflow.com/a/52374405
-  ffmpeg -loglevel quiet -i "${audio_path}" -an -vcodec copy "${absolute_cover_path}" < /dev/null
-  if [[ $? -ne 0 ]]; then
+  ffmpeg -loglevel quiet -i "${audio_path}" -an -vcodec copy "${absolute_cover_path_big}" < /dev/null
+  if [[ $? -eq 0 ]]; then
+    # 275 pixels is how the cover images are displayed at the time of writing. The \> says: don't enlarge smaller pictures.
+    magick "${absolute_cover_path_big}" -resize 275x275\> "${absolute_cover_path_small}"
+  else
     echo "This file has no cover image. We take the default image instead."
-    cp ../assets/img/default-cover.jpg "${absolute_cover_path}"
+    cp ../assets/img/default-cover.jpg "${absolute_cover_path_small}"
   fi
   set -e
 

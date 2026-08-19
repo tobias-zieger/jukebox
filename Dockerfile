@@ -12,7 +12,7 @@ COPY . .
 
 RUN apk update && \
     apk upgrade && \
-    apk add --no-cache busybox-extras nginx ffmpeg bash
+    apk add --no-cache busybox-extras nginx ffmpeg bash imagemagick
 
 # We need those variables for the update script.
 ENV PATH_TO_AUDIO="/jukebox/audio"
