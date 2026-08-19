@@ -43,5 +43,5 @@ wait $P1 $P2\n\
 \n\
 exit $?' > /start.sh
 
-CMD bash /start.sh
+CMD ["bash", "/start.sh"]
 
