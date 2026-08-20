@@ -152,7 +152,7 @@ These are more as a reminder for myself.
 
 To deploy the image to production, you need to build it, upload it to Docker Hub, and instantiate it on the server. This is how:
 
-* Build the image (with the latest base image) and tag it: `docker build --pull -t tobiaszieger/jukebox .`
+* Build the image (with the latest base image and do really build it anew) and tag it: `docker build --no-cache --pull -t tobiaszieger/jukebox .`
 * Login to Docker Hub: `docker login`
 * Push the image: `docker push tobiaszieger/jukebox`
 * Update the image (on the server): `docker pull tobiaszieger/jukebox`
