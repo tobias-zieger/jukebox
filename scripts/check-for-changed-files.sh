@@ -9,6 +9,10 @@ cache_directory=${PATH_TO_CACHE%/}
 # Try to create it (so ensure that it exists).
 mkdir -p ${cache_directory}
 
+# Wait for the lock to ensure that no concurrent check/update is running.
+exec 9>"${cache_directory}/check-for-changed-files.lock"
+flock -n 9 || exit 0
+
 last_hash_file=${cache_directory}/audio-hash
 
 # Touch the hash file to ensure that it exists.
@@ -24,4 +28,3 @@ if [[ ${current_hash} != ${last_hash} ]]; then
   ${scripts_directory}/update-database.sh
   echo ${current_hash} > ${last_hash_file}
 fi
-
